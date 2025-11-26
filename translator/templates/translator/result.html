@@ -1,0 +1,33 @@
+{% extends 'translator/base.html' %}
+
+{% block content %}
+<div class="card">
+    <h2>Translation Result</h2>
+
+    <div style="margin-bottom: 2rem;">
+        <strong>Status:</strong>
+        <span class="status-text status-{{ document.status }}">
+            {{ document.status }}
+        </span>
+    </div>
+
+    {% if document.status == 'completed' %}
+    <p>Your document has been successfully translated to <strong>{{ document.target_language }}</strong>.</p>
+    <a href="{{ document.translated_file.url }}" class="btn" download>Download Translated PDF</a>
+    {% elif document.status == 'failed' %}
+    <p>Sorry, there was an error processing your document.</p>
+    {% else %}
+    <p>Your document is being processed. Please refresh the page in a few moments.</p>
+    <script>
+        setTimeout(function () {
+            window.location.reload(1);
+        }, 5000);
+    </script>
+    {% endif %}
+
+    <div style="margin-top: 2rem;">
+        <a href="{% url 'upload' %}" style="color: var(--accent-color); text-decoration: none;">Translate another
+            document</a>
+    </div>
+</div>
+{% endblock %}

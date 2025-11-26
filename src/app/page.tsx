@@ -11,7 +11,7 @@ import { handleTranslation } from './actions';
 import { Upload, FileText, Languages, Loader2, Download, CheckCircle2 } from 'lucide-react';
 import { Logo } from '@/components/logo';
 
-type Language = 'Luo' | 'Kikuyu' | 'Luhya' | 'Kisii';
+type Language = 'Luo' | 'Kikuyu' | 'Luhya' | 'Kisii' | 'Swahili';
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
@@ -143,8 +143,8 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col items-center gap-4 pt-4">
-            <Button 
-              onClick={onTranslate} 
+            <Button
+              onClick={onTranslate}
               disabled={!file || !language || isLoading}
               className="w-full max-w-xs text-lg py-6"
               aria-live="polite"
@@ -158,7 +158,7 @@ export default function Home() {
                 'Translate Document'
               )}
             </Button>
-            
+
             {translatedUri && (
               <a
                 href={translatedUri}
