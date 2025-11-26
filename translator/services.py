@@ -177,24 +177,18 @@ class PDFService:
 
                         # Alignment
                         align = 0
-                        # Translate the reconstructed text for this group
-                        try:
-                            translated_text = TranslationService.translate_single(original_text, target_language)
-                        except Exception as e:
-                            print(f"Translation error for block on page {page_num}: {e}")
-                            translated_text = original_text
 
-                        # Save rendering info for pass 2
-                        item = {
+                        # Translate
+                        translated_text = TranslationService.translate_single(original_text, target_language)
+
+                        page_data.append({
                             "bbox": group_bbox,
                             "text": translated_text,
                             "fontname": fontname,
                             "fontfile": fontfile,
                             "color": rgb_color,
-                            "align": align,
-                            "orig_size": first_span.get("size", global_min_size),
-                        }
-                        page_data.append(item)
+                            "align": align
+                        })
             # Redact all first
             for item in page_data:
                 page.add_redact_annot(item["bbox"])
@@ -203,15 +197,29 @@ class PDFService:
             # Insert
             for item in page_data:
                 try:
-                    page.insert_textbox(
-                        item["bbox"],
-                        item["text"],
-                        fontsize=global_min_size, # Uniform size
-                        fontname=item["fontname"],
-                        fontfile=item["fontfile"],
-                        color=item["color"],
-                        align=item["align"]
-                    )
+                    # Try to fit text, reducing font size if necessary
+                    curr_fontsize = global_min_size
+                    rc = -1
+                    while curr_fontsize >= 6:
+                        rc = page.insert_textbox(
+                            item["bbox"],
+                            item["text"],
+                            fontsize=curr_fontsize,
+                            fontname=item["fontname"],
+                            fontfile=item["fontfile"],
+                            color=item["color"],
+                            align=item["align"]
+                        )
+                        if rc >= 0: # Success
+                            break
+                        curr_fontsize -= 1
+                    
+                    if rc < 0:
+                        print(f"Warning: Could not fit text in bbox {item['bbox']} even at size 6. Text: {item['text'][:20]}...")
+                        # Force insert with small font as fallback, might overflow but better than nothing?
+                        # Or just leave it (it returned < 0 so it might have drawn nothing)
+                        # PyMuPDF insert_textbox returns < 0 if rect is too small.
+                        # Let's try one last time with a very small font or just logging.
                 except Exception as e:
                     print(f"Render error: {e}")
 
