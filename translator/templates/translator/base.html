@@ -8,10 +8,12 @@
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #A3BE8C;
-            --background-color: #E9F5E1;
-            --accent-color: #BF616A;
-            --text-color: #2E3440;
+            --primary-color: #306B34;
+            --secondary-color: #1C5253;
+            --background-color: #F3FFC6;
+            --light-accent: #C3EB78;
+            --accent-color: #B6174B;
+            --text-color: #1C5253;
             --white: #FFFFFF;
         }
 
@@ -64,11 +66,12 @@
             cursor: pointer;
             text-decoration: none;
             font-size: 1rem;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .btn:hover {
-            background-color: #8FA87A;
+            background-color: var(--light-accent);
+            color: var(--secondary-color);
         }
 
         .form-group {
@@ -93,16 +96,17 @@
         footer {
             text-align: center;
             padding: 1rem;
-            background-color: #D8EAD3;
+            background-color: var(--secondary-color);
+            color: var(--white);
             font-size: 0.9rem;
         }
 
         .status-completed {
-            color: green;
+            color: var(--primary-color);
         }
 
         .status-failed {
-            color: red;
+            color: var(--accent-color);
         }
 
         .status-pending,
