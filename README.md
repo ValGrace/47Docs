@@ -1,5 +1,5 @@
-# Firebase Studio
+# About 47Docs
 
-This is a NextJS starter in Firebase Studio.
+This app converts pdf documents to any language while trying to retain the docs original layout. 
 
-To get started, take a look at src/app/page.tsx.
+To get started, run `python manage.py runserver`
